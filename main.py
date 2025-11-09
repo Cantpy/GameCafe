@@ -1,9 +1,12 @@
+# main.py - Entry point for the Gaming Cafe Management Application
+
 import sys
 import os
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import QTranslator, QLocale, Qt
+from PySide6.QtCore import QTranslator, Qt
 from ui.main_window import MainWindow
 from core.database import create_db_and_tables
+from core.seeder import seed_initial_data
 
 # --- App Constants ---
 # In a real app, you might load this from a config file (e.g., config.json)
@@ -12,6 +15,7 @@ CURRENT_LANGUAGE = "fa"  # <--- CHANGE THIS between "en" and "fa" to test!
 if __name__ == '__main__':
     # --- Database Setup ---
     create_db_and_tables()
+    seed_initial_data()
 
     # --- Application Setup ---
     app = QApplication(sys.argv)
@@ -32,9 +36,9 @@ if __name__ == '__main__':
 
     # Set Layout Direction based on language
     if CURRENT_LANGUAGE == 'fa':
-        QApplication.setLayoutDirection(Qt.RightToLeft)
+        QApplication.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
     else:
-        QApplication.setLayoutDirection(Qt.LeftToRight)
+        QApplication.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
     # --- Window Creation ---
     window = MainWindow()

@@ -1,7 +1,14 @@
+# core/models.py
+
+"""
+Defines the database models for the gaming cafe management application.
+Each class represents a table in the database with its respective fields and relationships.
+"""
+
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from core.database import Base  # Import the Base from our database.py file
+from core.database import Base
 
 
 class Device(Base):
@@ -10,7 +17,7 @@ class Device(Base):
     name = Column(String, unique=True, nullable=False)
     type = Column(String, nullable=False)
     hourly_rate = Column(Float, nullable=False)
-    status = Column(String, default='Available')
+    status = Column(String, default='موجود')
 
     sessions = relationship("Session", back_populates="device")
 
@@ -44,7 +51,7 @@ class Session(Base):
     end_time = Column(DateTime(timezone=True), nullable=True)
     session_cost = Column(Float, nullable=True)
     total_cost = Column(Float, nullable=True)
-    payment_status = Column(String, default='Unpaid')
+    payment_status = Column(String, default='پرداخت نشده')
 
     device = relationship("Device", back_populates="sessions")
     customer = relationship("Customer", back_populates="sessions")

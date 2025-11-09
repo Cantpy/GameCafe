@@ -1,3 +1,10 @@
+# core/database.py
+
+"""
+Sets up the database connection and ORM base for the gaming cafe management application.
+This module defines the database engine, session factory, and base class for ORM models.
+"""
+
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +25,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # SQLAlchemy uses it to map our classes to the database tables.
 Base = declarative_base()
 
+
 def create_db_and_tables():
     """
     Creates the database file and all tables defined by classes inheriting from Base.
@@ -26,6 +34,7 @@ def create_db_and_tables():
     # It checks for the existence of tables first, so it's safe to run multiple times.
     Base.metadata.create_all(bind=engine)
     print("Database and tables created successfully.")
+
 
 if __name__ == "__main__":
     create_db_and_tables()
