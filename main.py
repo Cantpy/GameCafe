@@ -1,26 +1,44 @@
 import sys
+import os
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QTranslator, QLocale, Qt
 from ui.main_window import MainWindow
 from core.database import create_db_and_tables
 
-if __name__ == '__main__':
-    # --- Application Setup ---
+# --- App Constants ---
+# In a real app, you might load this from a config file (e.g., config.json)
+CURRENT_LANGUAGE = "fa"  # <--- CHANGE THIS between "en" and "fa" to test!
 
-    # 1. Create the database and tables if they don't exist
-    # This is the perfect place to ensure our database is ready.
+if __name__ == '__main__':
+    # --- Database Setup ---
     create_db_and_tables()
 
-    # 2. Create the QApplication instance
-    # Every PySide6 application needs one (and only one) QApplication object.
-    # It manages the application's main event loop and resources.
+    # --- Application Setup ---
     app = QApplication(sys.argv)
 
-    # 3. Create and show our main window
+    # --- Internationalization (i18n) and RTL Setup ---
+    translator = QTranslator()
+
+    # Construct the path to the translation file
+    # Example path: gaming_cafe_app/i18n/app_fa.qm
+    i18n_path = os.path.join(os.path.dirname(__file__), 'i18n', f'app_{CURRENT_LANGUAGE}.qm')
+
+    if os.path.exists(i18n_path):
+        translator.load(i18n_path)
+        QApplication.installTranslator(translator)
+        print(f"Successfully loaded translation for '{CURRENT_LANGUAGE}'")
+    else:
+        print(f"Warning: Translation file not found for '{CURRENT_LANGUAGE}'. Using default language.")
+
+    # Set Layout Direction based on language
+    if CURRENT_LANGUAGE == 'fa':
+        QApplication.setLayoutDirection(Qt.RightToLeft)
+    else:
+        QApplication.setLayoutDirection(Qt.LeftToRight)
+
+    # --- Window Creation ---
     window = MainWindow()
     window.show()
 
-    # 4. Start the application's event loop
-    # This line is crucial. It starts the event loop, which listens for
-    # user interactions (like clicks and key presses) and keeps the
-    # application running until the user closes it.
+    # --- Start Event Loop ---
     sys.exit(app.exec())
